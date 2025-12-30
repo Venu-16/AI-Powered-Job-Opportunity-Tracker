@@ -43,9 +43,9 @@ class Matcher:
 
         for job in self.jobs:
             job_embedding = self.embedding_service.generate_embedding(job["description"])
-            semantic_sim = self.embedding_service.cosine_similarity(resume_embedding, job_embedding)
-            skill_overlap = self.compute_skill_overlap(resume_skills, job["skills"])
-            final_score = 0.7 * semantic_sim + 0.3 * skill_overlap
+            semantic_sim = float(self.embedding_service.cosine_similarity(resume_embedding, job_embedding))
+            skill_overlap = float(self.compute_skill_overlap(resume_skills, job["skills"]))
+            final_score = float(0.7 * semantic_sim + 0.3 * skill_overlap)
             matches.append({
                 "job_id": job["id"],
                 "title": job["title"],
