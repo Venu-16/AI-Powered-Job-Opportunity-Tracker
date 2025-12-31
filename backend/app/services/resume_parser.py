@@ -9,7 +9,7 @@ nlp = spacy.load("en_core_web_sm")
 class ResumeParser:
     @staticmethod
     def extract_text(file_path: str, file_type: str) -> str:
-        """Extract raw text from PDF or DOCX file."""
+        """Extract raw text from PDF, DOCX or TXT file."""
         if file_type == "pdf":
             with pdfplumber.open(file_path) as pdf:
                 text = ""
@@ -22,6 +22,9 @@ class ResumeParser:
             for para in doc.paragraphs:
                 text += para.text + "\n"
             return text
+        elif file_type == "txt":
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                return f.read()
         else:
             raise ValueError("Unsupported file type")
 
