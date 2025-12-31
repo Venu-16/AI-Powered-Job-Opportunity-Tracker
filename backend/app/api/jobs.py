@@ -48,15 +48,16 @@ def fetch_jobs(request: FetchRequest):
         else:
             stored_jobs.append(existing)
 
-    # run matching pipeline for all resumes
+    # run matching pipeline for all resumes (non-blocking on individual errors)
     matcher = Matcher()
-    resumes = db.query("resumes").all() if False else db.query(object).all()  # placeholder
-    # Instead, fetch Resume objects properly
     from ..models.resume import Resume
     resumes = db.query(Resume).all()
 
     for r in resumes:
-        # match and persist
-        matcher.match_resume_with_jobs(r, stored_jobs)
+        try:
+            matcher.match_resume_with_jobs(r, stored_jobs)
+        except Exception:
+            # Ignore matching errors for a single resume to allow other matches to proceed
+            continue
 
     return {"jobs_fetched": len(jobs)}
