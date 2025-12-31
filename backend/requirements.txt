@@ -8,3 +8,5 @@ pdfplumber
 python-docx
 numpy
 scikit-learn
+requests
+python-dateutil
